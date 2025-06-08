@@ -103,6 +103,7 @@ Syntax in HTML
   <li>Item 1</li>
   <li>Item 2</li>
 </ul>
+
 🔹 The <li> tags define the list items.
 🔹 The bullets are shown by default.
 
