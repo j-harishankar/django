@@ -99,6 +99,9 @@ Syntax in HTML
     <ul></ul> is an HTML tag used to create an unordered list (bulleted list).
 
 ------------------------------------------------------------------------------------
+
+
+
 <ul>
   <li>Item 1</li>
   <li>Item 2</li>
@@ -108,7 +111,10 @@ Syntax in HTML
 🔹 The bullets are shown by default.
 
 <li></li> is an HTML tag used to define a list item inside <ul> (unordered list) or <ol> (ordered list).
+
+ 
 --------------------------------------------------------------------------------------
+
 <a></a> is an HTML tag used to create a hyperlink.
 
 <a href="https://example.com">Visit Site</a>
@@ -117,6 +123,8 @@ href is the attribute that sets the link destination.
 The text between <a> and </a> is the clickable part.
 
 🔹 It opens a new page or website when clicked.
+
+
 -----------------------------------------------------------------------------------------
 
 
