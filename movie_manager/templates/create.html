@@ -1,9 +1,10 @@
-<ul>
-<li><a href ="{% url 'create' %}">create</a></li>
-<li><a href = "{% url 'edit' %}">edit</a></li>
-<li><a href = "{% url 'list' %}">list</a></li>
+{%extends 'parent.html'%}
 
-</ul>
 
+
+{% block content %}
+{%include 'menu.html'%}
 <h1>create</h1>
+{% endblock %}
+
 
