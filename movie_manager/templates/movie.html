@@ -1,0 +1,13 @@
+{% load static %}
+<h1>Movie page
+    <img src = "{%static 'images/logo.jpg'%}"/><h1>
+{% for movie in movies %}
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1>
+            <img src ="{% static 'images/'|add:movie.image %}"/>
+        </h1>
+        <h2>Title:{{movie.title}}</h2>
+        <p>Movie Year:{{movie.year}}</p>
+        <h4>summary:{{movie.summary}}</h4>
+    </div>
+{% endfor %}
