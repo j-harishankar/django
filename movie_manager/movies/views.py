@@ -1,11 +1,13 @@
 from django.shortcuts import render
-
+from .models import MovieInfo
 # Create your views here.
 def create(request):
     if request.POST:
-        print(request.POST.get("title")) 
-        print(request.POST.get("year")) 
-        print(request.POST.get("summary")) 
+        title = request.POST.get("title")
+        year = request.POST.get("year")
+        desc =request.POST.get("summary")
+        movie_obj = MovieInfo(title=title,year=year,description=desc)
+        movie_obj.save()
 
     return render(request, 'create.html')
 
