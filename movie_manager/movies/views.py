@@ -37,32 +37,6 @@ def movie(request):
     return render(request, 'movie.html', movie_list)
 
 def cred(request):
-    movie_list = {
-        'movies': [
-            {
-                'title': "Godfather",
-                'year': "1994",
-                'summary': "story of an underworld king",
-                'sucsess': True
-            },
-            {
-                'title': "Titanic",
-                'year': "1990",
-                'summary': "story of an ship",
-                'sucsess': False
-            },
-            {
-                'title': "underworld",
-                'year': "2000",
-                'summary': "story of an underworld dog",
-                'sucsess': True
-            },
-            {
-                'title': "Home alone",
-                'year': "1994",
-                'summary': "story of a kid",
-                'sucsess': False
-            }
-        ]
-    }
-    return render(request, 'cred.html', movie_list)
+    movie_set = MovieInfo.objects.all()
+    print(movie_set)
+    return render(request, 'cred.html',{'movies':movie_set})

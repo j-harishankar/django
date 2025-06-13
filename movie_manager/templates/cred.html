@@ -1,10 +1,6 @@
 {% for movieobj in movies %}
     <h1>Title:{{movieobj.title}}</h1>
     <p>Movie Year:{{movieobj.year}}</p>
-    <h4>summary:{{movieobj.summary | upper}}</h4>
-    {% if movieobj.sucsess %}
-    <p>Movie was an box office Hit</p>
-    {% else %}
-    <p>Movie was a Disaster</p>
-    {% endif %}
+    <h4>description:{{movieobj.description | upper}}</h4>
+
 {% endfor %}
