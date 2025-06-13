@@ -285,3 +285,143 @@ def create(request):
   Even after the form is submitted, we send back the same page — you can later change this to **redirect** or show a **success message**.
 
 ---  
+## 📅 DAY 7
+
+### ORM (Object Relational Mapping)
+
+* ORM is an approach that uses object-oriented programming to manipulate the data in the relational database.
+* Django ORM allows you to use the same Python API that interacts with various relational databases including MySQL, PostgreSQL, ORACLE...
+* i.e., no need to write SQL queries; instead, write class-based models and the ORM will translate them into SQL queries.
+
+### **`models.py`**
+
+* Used to write classes for managing the data using classes.
+
+* While creating a class, you shall inherit `Models` from Django's `models` module.
+
+* After creating a model class, run:
+
+```bash
+python manage.py makemigrations
+```
+
+This creates a corresponding migration file, but the table won't be visible yet. It basically generates migration scripts.
+
+* Now run:
+
+```bash
+python manage.py migrate
+```
+
+This will create the table in the database.
+
+* You will notice several other tables created automatically — these are default features or tables provided by the Django framework.
+
+---
+
+### 🔧 `python manage.py makemigrations`
+
+This command **creates new migration files** based on the changes you made to your models (in `models.py`).
+
+#### Example:
+
+If you add a new model like this:
+
+```python
+from django.db import models
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+```
+
+Then run:
+
+```bash
+python manage.py makemigrations
+```
+
+📅 Django will create a migration file like:
+`migrations/0001_initial.py`
+This file contains Python code that describes how to create the `Student` table in your database.
+
+> 💡 Think of this as Django **recording the changes** you want to make to the database.
+
+---
+
+### 🛠️ `python manage.py migrate`
+
+This command **applies the migration files** to the actual database.
+
+```bash
+python manage.py migrate
+```
+
+📅 It creates or updates tables in the database according to the migrations.
+
+> 💡 Think of this as **applying the recorded changes** to the real database.
+
+---
+
+### 🔁 Summary
+
+| Command                           | Purpose                                               |
+| --------------------------------- | ----------------------------------------------------- |
+| `python manage.py makemigrations` | Detects changes in models and creates migration files |
+| `python manage.py migrate`        | Applies the changes to the database                   |
+
+---
+
+* `id` is a primary key
+
+---
+
+### 📝 Storing Form Data in the Database in Django
+
+Once you have:
+
+* Created a **model** and applied **migrations**,
+* And created a **form in your view**,
+
+Then, instead of printing the submitted values to the terminal, you can **store them in the database**.
+
+To do this, you need to:
+
+1. Create an **object of the model class** (which represents the table).
+2. Assign the form values to that object.
+3. Save the object using `.save()`.
+
+---
+
+### ✅ Example
+
+```python
+from .models import MyModel
+
+def create(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        year = request.POST.get("year")
+        summary = request.POST.get("summary")
+
+        # Create and save the object
+        obj = MyModel(title=title, year=year, summary=summary)
+        obj.save()
+
+    return render(request, 'create.html')
+```
+
+This will save the submitted form data into the database table represented by `MyModel`.
+
+Let me know if you want to use Django forms instead of manual `request.POST.get`.
+
+---
+
+* Note:
+
+```python
+from .models import MovieInfo
+```
+
+The `.` means: "import from the same package (i.e., the same app directory)."
+
