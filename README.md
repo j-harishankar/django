@@ -425,3 +425,60 @@ from .models import MovieInfo
 
 The `.` means: "import from the same package (i.e., the same app directory)."
 
+
+
+
+
+### ✅ **Improved & Structured Version (with Explanation)**
+
+```python
+from django.shortcuts import render
+from .models import MovieInfo  # Make sure you import your model
+
+def cred(request):
+    # Step 1: Fetch all movie records from the MovieInfo table
+    all_movies = MovieInfo.objects.all()
+
+    # Step 2: Print the queryset in the console (for debugging)
+    print(all_movies)
+
+    # Step 3: Pass the movies to the template using context
+    return render(request, 'cred.html', {'movies': all_movies})
+```
+
+---
+
+### 🧠 **Understanding `Model.objects.method()`**
+
+In Django, you use this structure to interact with the database:
+
+```
+ModelName.objects.method()
+```
+
+* ✅ `ModelName` – Your model class (e.g., `MovieInfo`)
+* ✅ `.objects` – The manager that allows database queries
+* ✅ `.method()` – The query method (e.g., `all()`, `filter()`, `get()`, etc.)
+
+---
+
+### 🔍 Example in Plain English
+
+> *“Give me all the records from the `MovieInfo` table.”*
+> That’s what this line does:
+
+```python
+MovieInfo.objects.all()
+```
+
+---
+
+### 📌 Summary Rule
+
+> **Always access the database in Django using:**
+> `Model.objects.method()`
+> *(This keeps your code clean, predictable, and Djangoic.)*
+
+---
+
+Let me know if you want to also display these movies inside the `cred.html` template — I can guide you step by step.
