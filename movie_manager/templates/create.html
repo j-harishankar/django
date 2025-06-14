@@ -6,9 +6,7 @@
 <h1>create</h1>
 <form method = "post" enctype="multipart/form-data">
     {% csrf_token %}
-    Title : <input type = "text" name = "title" />
-    year : <input type = "text" name ="year"/>
-    summary : <input type = "text" name = "summary"/>
+    {{frm.as_p}}
     <button type="submit">create</button>
 </form>
 {% endblock %}

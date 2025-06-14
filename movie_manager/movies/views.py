@@ -1,15 +1,22 @@
 from django.shortcuts import render
 from .models import MovieInfo
+from . forms import MovieForm
 # Create your views here.
 def create(request):
+    frm = MovieForm()
     if request.POST:
-        title = request.POST.get("title")
-        year = request.POST.get("year")
-        desc =request.POST.get("summary")
-        movie_obj = MovieInfo(title=title,year=year,description=desc)
-        movie_obj.save()
-
-    return render(request, 'create.html')
+       # title = request.POST.get("title")
+       # year = request.POST.get("year")
+       # desc =request.POST.get("description")
+       # movie_obj = MovieInfo(title=title,year=year,description=desc)
+       # movie_obj.save()
+       # or
+       frm = MovieForm(request.POST)
+       if frm.is_valid:
+           frm.save()
+    else:
+        frm = MovieForm()    
+    return render(request, 'create.html',{'frm':frm})
 
 def list(request):
     return render(request, 'list.html')
