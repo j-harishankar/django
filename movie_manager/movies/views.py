@@ -38,5 +38,4 @@ def movie(request):
 
 def cred(request):
     movie_set = MovieInfo.objects.all()
-    print(movie_set)
     return render(request, 'cred.html',{'movies':movie_set})
