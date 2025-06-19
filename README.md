@@ -700,76 +700,69 @@ In your `template.html`:
 
 ---
 # day-9 
-## edit/delete operation
+## Edit/Delete Operations in Django (with Primary Key in URL)
 
-steps to follow:
--> add primary key in edit[urls.py] to pass it through url 
-```
-from . import views
-from django.urls import path
-urlpatterns = [
-    path('edit/<pk>',views.edit,name = 'edit'),
-]
-```
--> create appropriate view with request and pk as arguments 
--> inside the templates call the href using the url with primary key 
-now the created url will contain the id 
-```
-            <td>
-                <a href="{% url 'edit' movieobj.id%}">edit</a>/
-                <a href="{% url 'delete' movieobj.id %}">delete</a>
-            </td>
-```
---> Refer Template For this 
+This guide details how to implement **edit** and **delete** operations for your models in Django, using the primary key in the URL.
 
-->edit view accordingly  
----> for delete do:Retrive the object instance with the help of primary key 
-```
-def delete(request,pk):
-    instance = MovieInfo.objects.get(pk=pk)
-    instance.delete()
-    movie_set = MovieInfo.objects.all()
-    return render(request, 'cred.html',{'movies':movie_set})
-```
-### ✅ `instance = MovieInfo.objects.get(pk=pk)`
+---
 
-You're retrieving a single movie object from the database where the primary key (`pk`) matches what was passed in the URL.
+### 1. Add Primary Key to URL Patterns
 
-For example, if the URL is `/delete/3`, `pk` is `3`, so this gets:
+Update your `urls.py` to include the primary key (`pk`) in the route for edit and delete operations:
 
 ```python
-instance = MovieInfo.objects.get(pk=3)
+from . import views
+from django.urls import path
+
+urlpatterns = [
+    path('edit/<pk>', views.edit, name='edit'),
+    path('delete/<pk>', views.delete, name='delete'),
+]
 ```
 
 ---
 
-### ✅ `instance.delete()`
+### 2. Reference URLs with Primary Key in Templates
 
-This deletes that movie from the database permanently.
+In your template (e.g., `cred.html`), use the `{% url %}` template tag to generate edit and delete links for each object, passing the object's primary key:
 
-Once this line runs, the object with `pk=3` is removed from the table `MovieInfo`.
-
----
-
-### ✅ `movie_set = MovieInfo.objects.all()`
-
-After deleting, you’re getting all the remaining movies from the database.
-
-`movie_set` is now a list (technically a QuerySet) of all remaining movie objects.
+```django
+<td>
+    <a href="{% url 'edit' movieobj.id %}">edit</a> /
+    <a href="{% url 'delete' movieobj.id %}">delete</a>
+</td>
+```
 
 ---
 
-### ✅ `return render(request, 'cred.html', {'movies': movie_set})`
+### 3. Edit and Delete Views
 
-You're rendering the template `cred.html`.
+#### **Edit View**
 
-You're passing a context dictionary with `'movies'` as the key, and `movie_set` as its value.
+Your `edit` view should accept both `request` and `pk` as arguments. (Implementation depends on your update logic.)
+
+#### **Delete View**
+
+The `delete` view should:
+
+1. Retrieve the object using the primary key
+2. Delete the object
+3. Query all remaining objects for display
+4. Render the updated list in the template
+
+```python
+def delete(request, pk):
+    instance = MovieInfo.objects.get(pk=pk)  # Retrieve the object by primary key
+    instance.delete()                        # Delete the object
+    movie_set = MovieInfo.objects.all()      # Get all remaining objects
+    return render(request, 'cred.html', {'movies': movie_set})  # Render updated list
+```
 
 ---
 
-### 🔁 Result in Template
+### 4. How the Template Displays the Updated List
 
-Inside `cred.html`, you can loop over the movies like this:
+After deletion (or any update), you render the template with the updated movie list:
 
 ```django
 {% for movie in movies %}
@@ -777,3 +770,20 @@ Inside `cred.html`, you can loop over the movies like this:
 {% endfor %}
 ```
 
+This will display all movies currently in the database.
+
+---
+
+### Summary Table
+
+| Step           | Description                                                                                      |
+|----------------|--------------------------------------------------------------------------------------------------|
+| URL Patterns   | Add `<pk>` to URLs for edit/delete, map to respective views                                      |
+| Template Links | Use `{% url 'edit' obj.id %}` and `{% url 'delete' obj.id %}` in table rows                      |
+| Delete View    | Retrieve by `pk`, delete, then render updated object list                                        |
+| Template Loop  | Display all current objects using `{% for obj in objects %} ... {% endfor %}`                    |
+
+---
+
+**Tip:**  
+Always use the object's primary key in the URL for edit and delete operations to uniquely identify which row to update or remove.
