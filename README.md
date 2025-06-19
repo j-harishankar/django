@@ -699,3 +699,81 @@ In your `template.html`:
 ```
 
 ---
+# day-9 
+## edit/delete operation
+
+steps to follow:
+-> add primary key in edit[urls.py] to pass it through url 
+```
+from . import views
+from django.urls import path
+urlpatterns = [
+    path('edit/<pk>',views.edit,name = 'edit'),
+]
+```
+-> create appropriate view with request and pk as arguments 
+-> inside the templates call the href using the url with primary key 
+now the created url will contain the id 
+```
+            <td>
+                <a href="{% url 'edit' movieobj.id%}">edit</a>/
+                <a href="{% url 'delete' movieobj.id %}">delete</a>
+            </td>
+```
+--> Refer Template For this 
+
+->edit view accordingly  
+---> for delete do:Retrive the object instance with the help of primary key 
+```
+def delete(request,pk):
+    instance = MovieInfo.objects.get(pk=pk)
+    instance.delete()
+    movie_set = MovieInfo.objects.all()
+    return render(request, 'cred.html',{'movies':movie_set})
+```
+### ✅ `instance = MovieInfo.objects.get(pk=pk)`
+
+You're retrieving a single movie object from the database where the primary key (`pk`) matches what was passed in the URL.
+
+For example, if the URL is `/delete/3`, `pk` is `3`, so this gets:
+
+```python
+instance = MovieInfo.objects.get(pk=3)
+```
+
+---
+
+### ✅ `instance.delete()`
+
+This deletes that movie from the database permanently.
+
+Once this line runs, the object with `pk=3` is removed from the table `MovieInfo`.
+
+---
+
+### ✅ `movie_set = MovieInfo.objects.all()`
+
+After deleting, you’re getting all the remaining movies from the database.
+
+`movie_set` is now a list (technically a QuerySet) of all remaining movie objects.
+
+---
+
+### ✅ `return render(request, 'cred.html', {'movies': movie_set})`
+
+You're rendering the template `cred.html`.
+
+You're passing a context dictionary with `'movies'` as the key, and `movie_set` as its value.
+
+---
+
+### 🔁 Result in Template
+
+Inside `cred.html`, you can loop over the movies like this:
+
+```django
+{% for movie in movies %}
+    <p>{{ movie.name }}</p>
+{% endfor %}
+```
+
