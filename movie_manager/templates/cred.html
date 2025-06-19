@@ -1,6 +1,15 @@
-{% for movieobj in movies %}
-    <h1>Title:{{movieobj.title}}</h1>
-    <p>Movie Year:{{movieobj.year}}</p>
-    <h4>description:{{movieobj.description | upper}}</h4>
+{%extends 'parent.html'%}
+{%block content%}
+    <h1>List Movies</h1>
+    <table border ="1">
+    <tr><th>Title</th><th>Year</th><th>Description</th></tr>
+        {% for movieobj in movies %}
+        <tr>
 
-{% endfor %}
+            <td><h2>Title:{{movieobj.title}}</h2></td>
+            <td><h2>Movie Year:{{movieobj.year}}</h2></td>
+            <td><h2>description:{{movieobj.description | upper}}</h2></td>
+        </tr>
+        {% endfor %}
+    </table>
+{%endblock%}
