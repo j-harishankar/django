@@ -21,8 +21,7 @@ def create(request):
 def list(request):
     return render(request, 'list.html')
 
-def edit(request):
-    return render(request, 'edit.html')
+
 
 def movie(request):
     movie_list = {
@@ -44,5 +43,15 @@ def movie(request):
     return render(request, 'movie.html', movie_list)
 
 def cred(request):
+    movie_set = MovieInfo.objects.all()
+    return render(request, 'cred.html',{'movies':movie_set})
+
+
+def edit(request,pk):
+    return render(request, 'edit.html')
+
+def delete(request,pk):
+    instance = MovieInfo.objects.get(pk=pk)
+    instance.delete()
     movie_set = MovieInfo.objects.all()
     return render(request, 'cred.html',{'movies':movie_set})

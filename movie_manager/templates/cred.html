@@ -2,13 +2,17 @@
 {%block content%}
     <h1>List Movies</h1>
     <table border ="1">
-    <tr><th>Title</th><th>Year</th><th>Description</th></tr>
+    <tr><th>Title</th><th>Year</th><th>Description</th><th>edit/delete</th></tr>
         {% for movieobj in movies %}
         <tr>
 
             <td><h2>Title:{{movieobj.title}}</h2></td>
             <td><h2>Movie Year:{{movieobj.year}}</h2></td>
             <td><h2>description:{{movieobj.description | upper}}</h2></td>
+            <td>
+                <a href="{% url 'edit' movieobj.id%}">edit</a>/
+                <a href="{% url 'delete' movieobj.id %}">delete</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
