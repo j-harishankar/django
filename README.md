@@ -829,3 +829,79 @@ def edit(request, pk):
 
 
 
+---
+
+## ✏️ Edit Operation
+
+### ✅ View (`views.py`)
+
+```python
+from django.shortcuts import render, redirect
+from .models import MovieInfo
+
+def edit(request, pk):
+    instance = MovieInfo.objects.get(pk=pk)
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        year = request.POST.get("year")
+        description = request.POST.get("description")
+
+        instance.title = title
+        instance.year = year
+        instance.description = description
+        instance.save()
+
+        return redirect('some_view_name')  # Replace with your actual view name
+
+    return render(request, 'edit.html', {'movie': instance})
+```
+
+### ✅ Template (`edit.html`)
+
+```html
+<form method="post">
+    {% csrf_token %}
+    <label>Title:</label>
+    <input type="text" name="title" value="{{ movie.title }}"><br><br>
+
+    <label>Year:</label>
+    <input type="number" name="year" value="{{ movie.year }}"><br><br>
+
+    <label>Description:</label>
+    <textarea name="description">{{ movie.description }}</textarea><br><br>
+
+    <button type="submit">Update</button>
+</form>
+```
+
+---
+
+## ✅ Summary
+
+| Feature             | Action                                                |
+| ------------------- | ----------------------------------------------------- |
+| 🔗 Pass Primary Key | Through `<pk>` in URL                                 |
+| 🗑️ Delete          | Retrieve instance → `.delete()`                       |
+| ✏️ Edit             | Retrieve instance → update fields → `.save()`         |
+| 🔁 Template         | Use `{% url 'edit' id %}` and `{% url 'delete' id %}` |
+
+
+
+This will display all movies currently in the database.
+
+---
+
+### Summary Table
+
+| Step           | Description                                                                                      |
+|----------------|--------------------------------------------------------------------------------------------------|
+| URL Patterns   | Add `<pk>` to URLs for edit/delete, map to respective views                                      |
+| Template Links | Use `{% url 'edit' obj.id %}` and `{% url 'delete' obj.id %}` in table rows                      |
+| Delete View    | Retrieve by `pk`, delete, then render updated object list                                        |
+| Template Loop  | Display all current objects using `{% for obj in objects %} ... {% endfor %}`                    |
+
+---
+
+**Tip:**  
+Always use the object's primary key in the URL for edit and delete operations to uniquely identify which row to update or remove.
