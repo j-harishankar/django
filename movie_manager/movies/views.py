@@ -48,7 +48,17 @@ def cred(request):
 
 
 def edit(request,pk):
-    return render(request, 'edit.html')
+    instance_to_be_edited = MovieInfo.objects.get(pk=pk)
+    if request.POST:
+        title = request.POST.get('title')
+        year = request.POST.get('year')
+        description = request.POST.get('description')
+        instance_to_be_edited.title = title
+        instance_to_be_edited.year = year
+        instance_to_be_edited.description =description
+        instance_to_be_edited.save()
+    frm = MovieForm(instance=instance_to_be_edited)
+    return render(request, 'create.html',{'frm':frm})
 
 def delete(request,pk):
     instance = MovieInfo.objects.get(pk=pk)
