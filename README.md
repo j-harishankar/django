@@ -699,81 +699,133 @@ In your `template.html`:
 ```
 
 ---
-# day-9 
-## edit/delete operation
 
-steps to follow:
--> add primary key in edit[urls.py] to pass it through url 
-```
+
+# Day-9
+
+## ✏️ Edit / 🗑️ Delete Operations in Django
+
+This guide explains how to implement **Edit** and **Delete** functionality in a Django app using primary keys in URLs.
+
+---
+
+## 📌 Steps for Edit & Delete Operations
+
+### 1. ✅ Add Primary Key to URL
+
+Update `urls.py` to pass the primary key (`pk`) through the URL:
+
+```python
 from . import views
 from django.urls import path
+
 urlpatterns = [
-    path('edit/<pk>',views.edit,name = 'edit'),
+    path('edit/<pk>', views.edit, name='edit'),
+    path('delete/<pk>', views.delete, name='delete'),
 ]
 ```
--> create appropriate view with request and pk as arguments 
--> inside the templates call the href using the url with primary key 
-now the created url will contain the id 
-```
-            <td>
-                <a href="{% url 'edit' movieobj.id%}">edit</a>/
-                <a href="{% url 'delete' movieobj.id %}">delete</a>
-            </td>
-```
---> Refer Template For this 
 
-->edit view accordingly  
----> for delete do:Retrive the object instance with the help of primary key 
+---
+
+### 2. 🧠 Update Template to Pass Object ID
+
+In your template (e.g., `cred.html`), add links for edit and delete, passing the `movieobj.id`:
+
+```html
+<td>
+    <a href="{% url 'edit' movieobj.id %}">Edit</a> /
+    <a href="{% url 'delete' movieobj.id %}">Delete</a>
+</td>
 ```
-def delete(request,pk):
+
+---
+
+## 🗑️ Delete Operation
+
+### ✅ View (`views.py`)
+
+```python
+from django.shortcuts import render
+from .models import MovieInfo
+
+def delete(request, pk):
     instance = MovieInfo.objects.get(pk=pk)
     instance.delete()
     movie_set = MovieInfo.objects.all()
-    return render(request, 'cred.html',{'movies':movie_set})
-```
-### ✅ `instance = MovieInfo.objects.get(pk=pk)`
-
-You're retrieving a single movie object from the database where the primary key (`pk`) matches what was passed in the URL.
-
-For example, if the URL is `/delete/3`, `pk` is `3`, so this gets:
-
-```python
-instance = MovieInfo.objects.get(pk=3)
+    return render(request, 'cred.html', {'movies': movie_set})
 ```
 
----
+### 🔍 Explanation:
 
-### ✅ `instance.delete()`
+* `MovieInfo.objects.get(pk=pk)`: Retrieves the movie with the given primary key.
+* `instance.delete()`: Deletes it from the database.
+* `MovieInfo.objects.all()`: Fetches remaining movies.
+* Renders the updated list in `cred.html`.
 
-This deletes that movie from the database permanently.
-
-Once this line runs, the object with `pk=3` is removed from the table `MovieInfo`.
-
----
-
-### ✅ `movie_set = MovieInfo.objects.all()`
-
-After deleting, you’re getting all the remaining movies from the database.
-
-`movie_set` is now a list (technically a QuerySet) of all remaining movie objects.
-
----
-
-### ✅ `return render(request, 'cred.html', {'movies': movie_set})`
-
-You're rendering the template `cred.html`.
-
-You're passing a context dictionary with `'movies'` as the key, and `movie_set` as its value.
-
----
-
-### 🔁 Result in Template
-
-Inside `cred.html`, you can loop over the movies like this:
+### 💡 Template Loop Example
 
 ```django
 {% for movie in movies %}
-    <p>{{ movie.name }}</p>
+    <p>{{ movie.title }}</p>
 {% endfor %}
 ```
+
+---
+
+## ✏️ Edit Operation
+
+### ✅ View (`views.py`)
+
+```python
+from django.shortcuts import render, redirect
+from .models import MovieInfo
+
+def edit(request, pk):
+    instance = MovieInfo.objects.get(pk=pk)
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        year = request.POST.get("year")
+        description = request.POST.get("description")
+
+        instance.title = title
+        instance.year = year
+        instance.description = description
+        instance.save()
+
+        return redirect('some_view_name')  # Replace with your actual view name
+
+    return render(request, 'edit.html', {'movie': instance})
+```
+
+### ✅ Template (`edit.html`)
+
+```html
+<form method="post">
+    {% csrf_token %}
+    <label>Title:</label>
+    <input type="text" name="title" value="{{ movie.title }}"><br><br>
+
+    <label>Year:</label>
+    <input type="number" name="year" value="{{ movie.year }}"><br><br>
+
+    <label>Description:</label>
+    <textarea name="description">{{ movie.description }}</textarea><br><br>
+
+    <button type="submit">Update</button>
+</form>
+```
+
+---
+
+## ✅ Summary
+
+| Feature             | Action                                                |
+| ------------------- | ----------------------------------------------------- |
+| 🔗 Pass Primary Key | Through `<pk>` in URL                                 |
+| 🗑️ Delete          | Retrieve instance → `.delete()`                       |
+| ✏️ Edit             | Retrieve instance → update fields → `.save()`         |
+| 🔁 Template         | Use `{% url 'edit' id %}` and `{% url 'delete' id %}` |
+
+
 
