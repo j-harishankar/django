@@ -905,3 +905,166 @@ This will display all movies currently in the database.
 
 **Tip:**  
 Always use the object's primary key in the URL for edit and delete operations to uniquely identify which row to update or remove.
+
+
+
+# ✅ Day-10: Connecting PostgreSQL to Django
+
+---
+
+## 📦 Step 1: Install PostgreSQL Adapter
+
+Use `psycopg2` to connect Django with PostgreSQL:
+
+```bash
+pip install psycopg2
+```
+
+---
+
+## 🗄️ Step 2: Create a PostgreSQL Database
+
+Create a new database inside your PostgreSQL shell (e.g., `psql`) using:
+
+```sql
+CREATE DATABASE your_db_name;
+```
+
+You can leave most fields as default; you’ll use these details in `settings.py`.
+
+---
+
+## ⚙️ Step 3: Update Django `settings.py`
+
+Modify the `DATABASES` setting:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  # Change from 'sqlite3'
+        'NAME': 'your_db_name',
+        'USER': 'your_username',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
+
+---
+
+## 🔁 Step 4: Handle Existing Migrations
+
+Since previous migrations were done with SQLite, you'll need to migrate again for PostgreSQL.
+
+But if you want to **keep existing data**, follow the steps below.
+
+---
+
+## ✅ How to Move Data When Switching from SQLite to PostgreSQL
+
+### **Option 1: Using `dumpdata` and `loaddata`**
+
+This lets you migrate both schema and data safely.
+
+1. **Export Data from SQLite:**
+
+   ```bash
+   python manage.py dumpdata > data.json
+   ```
+
+2. **Switch DB to PostgreSQL in `settings.py` (as shown above).**
+
+3. **Run migrations for the new DB:**
+
+   ```bash
+   python manage.py migrate
+   ```
+
+4. **Load data into PostgreSQL:**
+
+   ```bash
+   python manage.py loaddata data.json
+   ```
+
+This ensures your old data is loaded into your new PostgreSQL tables.
+
+---
+
+## 🧠 Why This Works with Django
+
+If we weren’t using Django, we would have to:
+
+* Write raw SQL queries manually to recreate all tables and relationships.
+
+But Django uses **ORM (Object Relational Mapping)**:
+
+* So we just change the DB backend, run `migrate`, and the models are auto-converted into the correct DB structure.
+* No need to rewrite queries!
+
+
+### 📘 Django Media Handling – Easy Notes
+
+#### 🔹 What’s the purpose?
+
+To let users **upload files (like images)** and display them dynamically on your site (not just static images you added yourself).
+
+---
+
+### 🛠️ Setup Steps
+
+#### ✅ 1. Add an `ImageField` or `FileField` in your model:
+
+```python
+poster = models.ImageField(upload_to='posters/')
+```
+
+> `upload_to` decides the folder inside your `media/` directory.
+
+---
+
+#### ✅ 2. Set up `MEDIA_URL` and `MEDIA_ROOT` in `settings.py`:
+
+```python
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+```
+
+---
+
+#### ✅ 3. Tell Django to serve media in `urls.py` (only during development):
+
+```python
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+---
+
+### ⚠️ Common Gotchas
+
+* Always run:
+
+  ```bash
+  python manage.py makemigrations
+  python manage.py migrate
+  ```
+
+  after adding new fields.
+
+* In your template, check if file exists before showing:
+
+  ```html
+  {% if movie.poster %}
+      <img src="{{ movie.poster.url }}" width="100">
+  {% else %}
+      No image uploaded
+  {% endif %}
+  ```
+
+* Use `enctype="multipart/form-data"` in your form tag for file upload.
+
+
+
