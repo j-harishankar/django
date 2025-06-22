@@ -5,10 +5,17 @@
     <tr><th>Title</th><th>Year</th><th>Description</th><th>edit/delete</th></tr>
         {% for movieobj in movies %}
         <tr>
-
+            <td>
+            {% if movieobj.poster %}
+                <img src="{{ movieobj.poster.url }}" width="100" height="150">
+            {% else %}
+                No Image
+            {% endif %}
+            </td>
             <td><h2>Title:{{movieobj.title}}</h2></td>
             <td><h2>Movie Year:{{movieobj.year}}</h2></td>
             <td><h2>description:{{movieobj.description | upper}}</h2></td>
+
             <td>
                 <a href="{% url 'edit' movieobj.id%}">edit</a>/
                 <a href="{% url 'delete' movieobj.id %}">delete</a>

@@ -11,8 +11,8 @@ def create(request):
        # movie_obj = MovieInfo(title=title,year=year,description=desc)
        # movie_obj.save()
        # or
-       frm = MovieForm(request.POST)
-       if frm.is_valid:
+       frm = MovieForm(request.POST,request.FILES)
+       if frm.is_valid():
            frm.save()
     else:
         frm = MovieForm()    
