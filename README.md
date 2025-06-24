@@ -1135,5 +1135,4 @@ chatgpt example:
 >>> movie1.censor = censor_obj
 >>> movie2.censor = censor_obj   # ❗ This will override movie1's link
 
-
 ```
