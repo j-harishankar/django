@@ -1068,3 +1068,72 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 
+
+# ✅ Day-10: Learning ORM Relations in Django
+
+## 🔗 One-to-One Relationship
+
+### 📌 Concept:
+
+* A **One-to-One relation** connects two models so that **each row in one model** is related to **exactly one row in another model**.
+* In Django, this is achieved using `OneToOneField`.
+
+### 🛠️ Steps:
+
+1. **Create the related model first** (e.g., `CensorInfo`).
+2. **Use that model as a field** in another model using `models.OneToOneField`.
+
+### 🧠 Tip:
+
+> When a new instance is created in the second model (e.g., `CensorInfo`), it can be linked to **only one** instance in the main model (e.g., `MovieInfo`).
+
+---
+
+## 🐚 Using the Django Shell Efficiently
+
+### 🚫 Instead of:
+
+* Writing views and running the server every time just to test data operations.
+
+### ✅ Do this:
+
+* Use the Django shell to interact with models directly. It’s faster for testing and learning.
+
+### 💻 Example:
+
+```python
+>>> from movies.models import CensorInfo, MovieInfo
+
+# Get an existing movie
+>>> movie_obj = MovieInfo.objects.get(title='batman')
+
+# Create a new CensorInfo and assign it to the movie
+>>> movie_obj.censor = CensorInfo.objects.create(rating='a', certified_by='IMDB')
+
+# Access the censor info
+>>> movie_obj.censor
+<CensorInfo: CensorInfo object (2)>
+
+>>> print(movie_obj.censor)
+CensorInfo object (2)
+
+# Access a specific field
+>>> movie_obj.censor.rating
+'a'
+```
+
+
+```
+chatgpt example:
+
+
+>>> censor_obj = CensorInfo.objects.create(rating='A', certified_by='IMDB')
+
+>>> movie1 = MovieInfo.objects.get(title='Batman')
+>>> movie2 = MovieInfo.objects.get(title='Superman')
+
+>>> movie1.censor = censor_obj
+>>> movie2.censor = censor_obj   # ❗ This will override movie1's link
+
+
+```
