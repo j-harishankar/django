@@ -1151,3 +1151,38 @@ protect :- prevents deletion
 restrict :- similar to protection but can be deleted if there is a restricted realtion ship 
 set_null
 set_default
+
+
+
+```python
+directed_by = models.ForeignKey(
+    director,
+    on_delete=models.CASCADE,
+    related_name='directed_movie',
+    null=True
+)
+```
+
+| Part                            | Explanation                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `directed_by`                   | This is the name of the field in your model. It represents who directed the movie.                            |
+| `models.ForeignKey`             | This defines a **many-to-one** relationship. Many movies can be directed by one director.                     |
+| `director`                      | This should be the name of another model (e.g., `Director`). It's the related model.                          |
+| `on_delete=models.CASCADE`      | If the director is deleted, all movies directed by them will also be deleted automatically.                   |
+| `related_name='directed_movie'` | This allows you to access all movies by a director using `director.directed_movie.all()` in reverse relation. |
+| `null=True`                     | This allows the `directed_by` field to be empty (NULL) in the database. It’s optional.                        |
+
+### Summary:
+
+This line creates a link between a movie and its director. If the director is deleted, their movies are also deleted. You can find all movies of a director easily using the `related_name`.
+
+Let me know if you want an example to see how it works in practice.
+
+
+
+## MANY-TO-MANY 
+
+unlike one to many or one to one which just require one column to keep track example movie require one foreign key to keep track of director id whereas same director will be linked to
+multiple keys 
+
+but many-to-many an entire seperate table will be created to maintain the track of actor id as well as movie id 
