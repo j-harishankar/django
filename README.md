@@ -1136,3 +1136,18 @@ chatgpt example:
 >>> movie2.censor = censor_obj   # ❗ This will override movie1's link
 
 ```
+
+--> like you retrive censor details from MovieInfo its also possible to do Vice-Versa  to retrive the movie details using censorinfo model since they have one-one connection 
+
+
+
+## one - to - many (1 Director -- many Movies)
+
+use forign key in model where that model should exactly be connected to only one object of another model (ippo director(many) aanenkil movies modelil foreign key create cheyyu)
+
+
+CASCADE :- if you deleted the censor info then automatically the movi info will be deleted 
+protect :- prevents deletion 
+restrict :- similar to protection but can be deleted if there is a restricted realtion ship 
+set_null
+set_default
