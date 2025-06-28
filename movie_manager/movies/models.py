@@ -1,13 +1,20 @@
+from collections import deque
 from django.db import models
 
 # Create your models here.
 class director(models.Model):
     name = models.CharField(max_length=300)
+    def __str__(self):
+        return self.name
 class CensorInfo(models.Model):
     rating = models.CharField(max_length=10)
     certified_by = models.CharField(max_length=200,null=True)
+    def __str__(self):
+        return self.certified_by
 class Actor(models.Model):
     name = models.CharField(max_length=300)
+    def __str__(self):
+        return self.name
 class MovieInfo(models.Model):
     title = models.CharField(max_length=250)
     year = models.IntegerField()
