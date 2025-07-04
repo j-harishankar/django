@@ -1188,7 +1188,40 @@ multiple keys
 but many-to-many an entire seperate table will be created to maintain the track of actor id as well as movie id 
 
 
-# ✅ Day-10: Learning Query set api
+# ✅ Day-11: Learning Query set api
 
 Query sets are types 
 it contains set of Queries 
+
+Query sets are lazy
+all_movies = MoviesInfo.objects.all()
+
+
+### values():- returns a dictiory or JSON format values rather than model instances in db. this is iteratable 
+
+### filter() :- similar to WHERE condition in sql 
+Eg:- movieset = MovieInfo.objects.filter(year=2023)
+>>> movie_2023 = MovieInfo.objects.filter(year=2020 AND title = 'batman')
+>>> print(movie_2023)
+<QuerySet []>
+>>> movie_2023 = MovieInfo.objects.filter(title = 'batman')
+>>> print(movie_2023)
+<QuerySet [<MovieInfo: batman>]>
+
+### exclude() --> opp of filter
+### orderby() -->
+
+>>> movie_2023 = MovieInfo.objects.order_by('year')
+>>> print(movie_2023)                              
+<QuerySet [<MovieInfo: spider_man>, <MovieInfo: life of pi>, <MovieInfo: batman>, <MovieInfo: pac man>]> 
+
+
+to make it descending 
+>>> movie_2023 = MovieInfo.objects.order_by('-year')
+
+### field lookups
+consider you want to filter with a specific field then use __ to mention the attribute to call 
+movie_set = MovieInfo.objects.all(acters__name='Mohanlal')
+movie_set = MovieInfo.objects.all(title__startswith='M')
+__lt --> lesser than 
+__gt --> greater than
