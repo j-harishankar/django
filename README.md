@@ -1186,3 +1186,9 @@ unlike one to many or one to one which just require one column to keep track exa
 multiple keys 
 
 but many-to-many an entire seperate table will be created to maintain the track of actor id as well as movie id 
+
+
+# ✅ Day-10: Learning Query set api
+
+Query sets are types 
+it contains set of Queries 
