@@ -1190,38 +1190,133 @@ but many-to-many an entire seperate table will be created to maintain the track 
 
 # ✅ Day-11: Learning Query set api
 
-Query sets are types 
-it contains set of Queries 
 
-Query sets are lazy
-all_movies = MoviesInfo.objects.all()
+# 📌 Django QuerySets & Field Lookups - Corrected and Structured Notes
+
+## ✅ What is a QuerySet?
+
+* A **QuerySet** is a collection (set) of queries to retrieve data from the database.
+* QuerySets are **lazy**, meaning:
+
+  * They don't hit the database until you explicitly ask for the data (e.g., when you loop over them or convert them to a list).
+
+```python
+all_movies = MovieInfo.objects.all()
+```
+
+---
+
+## ✅ values()
+
+* Returns **dictionary-like** objects (instead of model instances).
+* Useful when you want only specific fields or for JSON serialization.
+
+```python
+movies = MovieInfo.objects.values()  
+# Output: <QuerySet [{'id': 1, 'title': 'batman', 'year': 2023}, ...]>
+
+movies = MovieInfo.objects.values('title', 'year')
+```
+
+---
+
+## ✅ filter()
+
+* Works like **WHERE** clause in SQL to filter results.
+
+### Example 1: Single filter
+
+```python
+movies_2023 = MovieInfo.objects.filter(year=2023)
+```
+
+### Example 2: Multiple conditions (use comma `,` which means **AND** in Django)
+
+```python
+movies = MovieInfo.objects.filter(year=2020, title='batman')
+```
+
+If no match is found:
+
+```python
+print(movies)  
+# Output: <QuerySet []>
+```
+
+### Example 3: Only title filter
+
+```python
+movies = MovieInfo.objects.filter(title='batman')
+print(movies)  
+# Output: <QuerySet [<MovieInfo: batman>]>
+```
+
+---
+
+## ✅ exclude()
+
+* Opposite of `filter()`. It excludes matching results.
+
+```python
+movies = MovieInfo.objects.exclude(title='batman')
+```
+
+---
+
+## ✅ order\_by()
+
+* Orders results based on field names.
+
+```python
+movies = MovieInfo.objects.order_by('year')  # Ascending
+movies = MovieInfo.objects.order_by('-year') # Descending
+```
+
+---
+
+## ✅ Field Lookups (Important)
+
+Django provides **field lookups** for advanced filtering using double underscores `__`.
+
+### 🔑 Basic Syntax:
+
+```python
+Model.objects.filter(fieldname__lookup='value')
+```
+
+| Lookup        | Meaning                        | Example                               |
+| ------------- | ------------------------------ | ------------------------------------- |
+| `exact`       | Exact match                    | `filter(title__exact='batman')`       |
+| `iexact`      | Case-insensitive exact         | `filter(title__iexact='Batman')`      |
+| `contains`    | Field contains value           | `filter(title__contains='bat')`       |
+| `icontains`   | Case-insensitive contains      | `filter(title__icontains='Bat')`      |
+| `startswith`  | Field starts with value        | `filter(title__startswith='Bat')`     |
+| `istartswith` | Case-insensitive starts with   | `filter(title__istartswith='bat')`    |
+| `endswith`    | Field ends with value          | `filter(title__endswith='man')`       |
+| `iendswith`   | Case-insensitive endswith      | `filter(title__iendswith='Man')`      |
+| `in`          | Matches any value in list      | `filter(year__in=[2020, 2021, 2022])` |
+| `gt`          | Greater than                   | `filter(year__gt=2020)`               |
+| `lt`          | Less than                      | `filter(year__lt=2025)`               |
+| `gte`         | Greater than or equal          | `filter(year__gte=2020)`              |
+| `lte`         | Less than or equal             | `filter(year__lte=2025)`              |
+| `range`       | Between two values (inclusive) | `filter(year__range=(2010, 2020))`    |
+
+---
+
+### Example: Actor Name (Related Field)
+
+If you have a **ForeignKey** or **ManyToManyField** like `actors`:
+
+```python
+movies = MovieInfo.objects.filter(actors__name='Mohanlal')
+```
+
+---
+
+### Example: Title starts with 'M'
+
+```python
+movies = MovieInfo.objects.filter(title__startswith='M')
+```
 
 
-### values():- returns a dictiory or JSON format values rather than model instances in db. this is iteratable 
-
-### filter() :- similar to WHERE condition in sql 
-Eg:- movieset = MovieInfo.objects.filter(year=2023)
->>> movie_2023 = MovieInfo.objects.filter(year=2020 AND title = 'batman')
->>> print(movie_2023)
-<QuerySet []>
->>> movie_2023 = MovieInfo.objects.filter(title = 'batman')
->>> print(movie_2023)
-<QuerySet [<MovieInfo: batman>]>
-
-### exclude() --> opp of filter
-### orderby() -->
-
->>> movie_2023 = MovieInfo.objects.order_by('year')
->>> print(movie_2023)                              
-<QuerySet [<MovieInfo: spider_man>, <MovieInfo: life of pi>, <MovieInfo: batman>, <MovieInfo: pac man>]> 
-
-
-to make it descending 
->>> movie_2023 = MovieInfo.objects.order_by('-year')
-
-### field lookups
-consider you want to filter with a specific field then use __ to mention the attribute to call 
-movie_set = MovieInfo.objects.all(acters__name='Mohanlal')
-movie_set = MovieInfo.objects.all(title__startswith='M')
-__lt --> lesser than 
-__gt --> greater than
