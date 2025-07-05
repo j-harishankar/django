@@ -1414,6 +1414,10 @@ def cred(request):
 | Values must be strings  | Cookies only store **string** values, not integers. |
 
 ---
+# ✅ Day-13: **sessions in django** 
+-- sessions are what is stored in server rather than something stored locally in client.
+-- The server typically initiates a server when a user logs into website.
+-- Furthermore we can identify a session by a unique session id.
 
 
 
