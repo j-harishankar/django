@@ -19,6 +19,7 @@ def create(request):
     return render(request, 'create.html',{'frm':frm})
 
 def list(request):
+    print(request.COOKIES)
     return render(request, 'list.html')
 
 
@@ -43,8 +44,12 @@ def movie(request):
     return render(request, 'movie.html', movie_list)
 
 def cred(request):
+    visits = int(request.COOKIES.get('visits',0))# here you get the number of visits stored in cookies if its empty then return 0 thats what ,0 represents 
+    visits = visits+1
     movie_set = MovieInfo.objects.all()
-    return render(request, 'cred.html',{'movies':movie_set})
+    response = render(request, 'cred.html',{'movies':movie_set,'visit':visits})
+    response.set_cookie('visits',str(visits))
+    return response
 
 
 def edit(request,pk):

@@ -1320,3 +1320,100 @@ movies = MovieInfo.objects.filter(title__startswith='M')
 ```
 
 
+
+# ✅ Day-12: **Cookies in Django**
+
+---
+
+## 🔗 Protocols (Basic Understanding)
+
+* A **protocol** is a **set of rules** that define how communication happens between a **client** (browser) and a **server** (like Django).
+* The most common protocol used on the web is **HTTP (HyperText Transfer Protocol)**.
+
+---
+
+## 🌐 **HTTP Protocol: Stateless by Nature**
+
+### ⚡ What is a **Stateless Protocol**?
+
+1. **HTTP is Stateless**:
+
+   * Every time your browser sends a request to a server (like Django), the server treats it as **new** and **unrelated to any previous request**.
+
+2. **Example of Statelessness**:
+
+   * Visit a page → Django responds.
+   * Refresh the page → Django does **not remember you** or your last visit.
+
+3. **How Django Manages This?**
+
+   * Django uses:
+
+     * **Cookies** → Data stored on the **client** side (browser).
+     * **Sessions** → Data stored on the **server** side.
+
+4. **Without Cookies/Sessions**:
+
+   * Each interaction would be **disconnected**:
+
+     * No login persistence.
+     * No shopping cart memory.
+     * No user preferences.
+
+---
+
+✅ **In Short:**
+
+* **Stateless protocol** = No memory between requests.
+* Django adds **cookies/sessions** to create **stateful** experiences.
+
+---
+
+## 🍪 Cookies in Django
+
+### 🔑 How Do Cookies Work?
+
+1. You visit a website → Browser sends a request.
+2. Website server sends back a **cookie** along with the response.
+3. The cookie is stored on your **computer (browser)**.
+4. On the next visit, your browser **automatically sends the cookie back** to the server.
+5. The server uses the cookie to **recognize you** or store/retrieve information.
+
+---
+
+## ✅ Django Cookie Example
+
+```python
+def cred(request):
+    # Get the current 'visits' cookie value, default to 0 if it doesn't exist
+    visits = int(request.COOKIES.get('visits', 0))
+    
+    # Increment the visit count
+    visits = visits + 1
+
+    # Get movie data from the database (example)
+    movie_set = MovieInfo.objects.all()
+
+    # Render the page with movie data and visit count
+    response = render(request, 'cred.html', {'movies': movie_set, 'visit': visits})
+
+    # Set the updated visit count in the cookie (value must be a string)
+    response.set_cookie('visits', str(visits))
+
+    return response
+```
+
+---
+
+### 📝 Key Notes:
+
+| Cookie Step             | Explanation                                         |
+| ----------------------- | --------------------------------------------------- |
+| `request.COOKIES.get()` | Retrieves existing cookie (or default if missing).  |
+| `set_cookie()`          | Sets/updates the cookie in the browser.             |
+| Values must be strings  | Cookies only store **string** values, not integers. |
+
+---
+
+
+

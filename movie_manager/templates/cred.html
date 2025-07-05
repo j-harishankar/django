@@ -1,6 +1,6 @@
 {%extends 'parent.html'%}
 {%block content%}
-    <h1>List Movies</h1>
+    <h1>List Movies {{visit}} time visited</h1>
     <table border ="1">
     <tr><th>Title</th><th>Year</th><th>Description</th><th>edit/delete</th></tr>
         {% for movieobj in movies %}
