@@ -1414,10 +1414,93 @@ def cred(request):
 | Values must be strings  | Cookies only store **string** values, not integers. |
 
 ---
-# ✅ Day-13: **sessions in django** 
--- sessions are what is stored in server rather than something stored locally in client.
--- The server typically initiates a server when a user logs into website.
--- Furthermore we can identify a session by a unique session id.
+Here’s a clean and simple explanation in the format you asked for, with your questions turned into headings:
 
+---
+
+# ✅ Day-13: **Sessions in Django**
+
+---
+
+## ✅ What is a Session?
+
+* A **session** in Django allows you to **store and retrieve data on the server side** for a specific user across multiple requests and pages.
+* Unlike cookies (which store data in the browser), sessions **store data in the database (or cache/files)**.
+* Each session has a **unique session ID** which is sent to the user's browser as a cookie. The server uses this ID to find the user's stored session data.
+
+---
+
+## ✅ What is Middleware?
+
+* **Middleware** is a **layer of code** that runs **before** and **after** every Django request and response.
+* Middleware is used to:
+
+  * Process requests before reaching the view (e.g., authentication, session handling, security checks).
+  * Process responses before sending them back to the client.
+* Django’s session framework itself uses middleware to manage session data automatically.
+
+---
+
+## ✅ How Do User and Server Use Sessions? (Step by Step)
+
+1️⃣ **User sends a request** to the server (e.g., visiting a webpage).
+
+2️⃣ **Middleware checks** if the request has a **session cookie (sessionid)**.
+
+3️⃣ If **no session exists**, Django:
+
+* Creates a **new session** (a new row in the session table).
+* Generates a **unique session ID** and sends it as a cookie in the response.
+
+4️⃣ If **session exists**, Django:
+
+* Retrieves the **session data** from the database using the **session ID** provided by the cookie.
+
+5️⃣ You can now **store or retrieve session data** in your views:
+
+```python
+request.session['my_key'] = 'my_value'  # Storing data
+value = request.session.get('my_key')   # Retrieving data
+```
+
+6️⃣ On each subsequent request, the **session cookie** helps Django know **which session belongs to which user**.
+
+---
+
+## ✅ Example: Counting Visits to an Edit Page for a Movie
+
+### Problem:
+
+👉 You want to **track how many times a user visits the edit page** for a particular movie.
+
+---
+
+### Sample View (`views.py`):
+
+```python
+def edit(request, pk):
+    key = f'edit_visits_{pk}'
+    visit_count = request.session.get(key, 0) + 1
+    request.session[key] = visit_count
+
+    movie = MovieInfo.objects.get(pk=pk)
+    return render(request, 'edit.html', {'movie': movie, 'visit_count': visit_count})
+```
+
+---
+
+### Sample Template (`edit.html`):
+
+```html
+<h1>Editing Movie: {{ movie.title }}</h1>
+<p>You have visited this edit page {{ visit_count }} times.</p>
+```
+
+---
+
+✅ In this example:
+
+* The session key is unique for each movie (`edit_visits_5`, `edit_visits_7`, etc.).
+* The session is stored **on the server** while only the **session ID** is stored in the browser.
 
 
