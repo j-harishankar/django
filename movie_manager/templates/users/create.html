@@ -1,0 +1,28 @@
+{%extends 'parent.html'%}
+
+
+{% block content %}
+
+
+
+<h1>create</h1>
+<form method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p><label>Username:</label><input type="text" name="username" /></p>
+    <p><label>Password:</label><input type="password" name="password" /></p>
+    <button type = "submit">Signup</button>
+</form>
+<p>
+    {% if users %}
+    new user created with username:{{users.username}} 
+    {% endif %}
+</p>
+<p style = "background-color: red;">
+    
+    {% if error %}
+    new user created with username:{{error}} 
+    {% endif %} 
+</p>
+{% endblock %}
+
+
