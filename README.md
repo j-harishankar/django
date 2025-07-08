@@ -1503,4 +1503,8 @@ def edit(request, pk):
 * The session key is unique for each movie (`edit_visits_5`, `edit_visits_7`, etc.).
 * The session is stored **on the server** while only the **session ID** is stored in the browser.
 
+## user management 
 
+from django.contrib.auth.models import User
+this is the model automatically created by the framework and it can use to create or perform 
+various functions for the new users that are created 
