@@ -1508,3 +1508,9 @@ def edit(request, pk):
 from django.contrib.auth.models import User
 this is the model automatically created by the framework and it can use to create or perform 
 various functions for the new users that are created 
+
+
+# Day - 14 **Authentication**
+There are 3 steps in authentication 
+[1] retrive values of username and password
+[2] check if user is available i.e authenticated user or not (import authenticate)
