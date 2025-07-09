@@ -1510,7 +1510,83 @@ this is the model automatically created by the framework and it can use to creat
 various functions for the new users that are created 
 
 
-# Day - 14 **Authentication**
-There are 3 steps in authentication 
-[1] retrive values of username and password
-[2] check if user is available i.e authenticated user or not (import authenticate)
+
+
+## 📅 Day 14 — **Authentication in Django**
+
+### ✅ Three Essential Steps for Authentication:
+
+1️⃣ **Retrieve User Credentials:**
+
+* Collect the `username` and `password` values from the user (typically from a login form).
+
+2️⃣ **Check User Validity (Authentication):**
+
+* Use Django’s built-in function:
+
+  ```python
+  from django.contrib.auth import authenticate
+  user = authenticate(request, username=username, password=password)
+  ```
+* This checks whether the provided credentials match an existing user.
+
+3️⃣ **Log the User In:**
+
+* If authentication succeeds:
+
+  ```python
+  from django.contrib.auth import login
+  login(request, user)
+  ```
+* This creates a session and stores the user’s ID in the session.
+
+---
+
+### 🔒 Logging Out:
+
+* To log out a user:
+
+  ```python
+  from django.contrib.auth import logout
+  logout(request)
+  ```
+* This removes the session data and the user ID, effectively logging the user out.
+
+---
+
+### 🚨 The Problem After Logout:
+
+* Even after logging out, a user could **manually enter the URL of a protected page** and still access it if no check is in place.
+
+---
+
+### 🛡 Solution: Using Decorators (`@login_required`)
+
+* **What are decorators?**
+
+  * They are powerful tools in Python that allow you to **modify the behavior of a function** without changing its actual code.
+  * Decorators “wrap” a function to **extend its functionality**.
+
+* In Django, use the `@login_required` decorator to protect views:
+
+  ```python
+  from django.contrib.auth.decorators import login_required
+
+  @login_required(login_url='login/')
+  def home(request):
+      return render(request, 'home.html')
+  ```
+
+* This ensures:
+
+  * If the user is **logged in**, they can access the page.
+  * If the user is **not logged in**, they are **redirected to the login page**.
+
+---
+
+### 🎯 Key Takeaways:
+
+* 🔑 Always use `@login_required` to protect sensitive pages (like dashboards, profile pages, etc.).
+* 🔑 Logout removes the session, but **manual URL changes** can bypass security unless decorators are in place.
+
+
