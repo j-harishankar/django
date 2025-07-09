@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from .models import MovieInfo
 from . forms import MovieForm
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
+@login_required(login_url='login/')
+
 def create(request):
     frm = MovieForm()
     if request.POST:
@@ -17,6 +21,7 @@ def create(request):
     else:
         frm = MovieForm()    
     return render(request, 'create.html',{'frm':frm})
+@login_required(login_url='login/')
 
 def list(request):
     print(request.COOKIES)
@@ -42,7 +47,7 @@ def movie(request):
         ]
     }
     return render(request, 'movie.html', movie_list)
-
+@login_required(login_url='login/')
 def cred(request):
     recent_movies = request.session.get('recent_visits',[])
     visits = int(request.COOKIES.get('visits',0))# here you get the number of visits stored in cookies if its empty then return 0 thats what ,0 represents 
@@ -57,6 +62,7 @@ def cred(request):
     response.set_cookie('visits',str(visits))
     return response
 
+@login_required(login_url='login/')
 
 def edit(request,pk):
     instance_to_be_edited = MovieInfo.objects.get(pk=pk)
@@ -77,6 +83,7 @@ def edit(request,pk):
         request.session[key] = visit_count
         frm = MovieForm(instance=instance_to_be_edited)
     return render(request, 'create.html',{'frm':frm,'visit_count': visit_count})
+@login_required(login_url='login/')
 
 def delete(request,pk):
     instance = MovieInfo.objects.get(pk=pk)
