@@ -32,7 +32,7 @@ django-admin startproject <project_name>
 ### ▶️ Creating an App
 
 ```bash
-python manage.py startapp <app_name>
+django-admin startapp <app_name>
 ```
 
 ### ▶️ Running the Project
